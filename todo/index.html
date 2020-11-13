@@ -15,11 +15,14 @@
     <div id="root"></div>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
         main {
             background-color: #f1f6f9;
             padding: 2rem;
             border-radius: 0.1rem;
             font-size: 1.4rem;
+            height: 100vh;
         }
 
         form {
@@ -32,12 +35,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #9ba4b4;
+            background-color: #9ba4b4ea;
             color: #14274e;
             padding: 0.5em;
             margin: 0.5em 0;
             border-radius: 0.1em;
             font-family: sans-serif;
+        }
+        .eliminar{
+            background-color: red;
+            color: white;
+            border-radius: 20px;
+            border: 0;
+            padding: 9px;
+
+
         }
 
         .add {
@@ -45,13 +57,17 @@
             color: #f1f6f9;
             border-radius: 1rem;
             border: 0;
-            padding: 0.4rem 1rem;
+            padding: 0.6rem 4rem;
             font-size: 1.3rem;
+        }
+
+        .saludo {
+            font-family: 'Open Sans', sans-serif;
         }
 
         .input {
             font-size: 1.2rem;
-            max-width: 60%;
+            width: 40vw;
         }
 
         input[type="checkbox"] {
@@ -60,19 +76,25 @@
     </style>
 
     <script type="text/babel">
-        const ToDo = ({ text, deleteTodo }) => {
-            const deteleIt = () => deleteTodo(text);
+        const ToDo = ({ text, deleteTodo}) => {
+            const deteleIt = () => {
+                deleteTodo(text);
+              
+            }
+                
             return (
                 <div className="todo" onClick={deteleIt}>
                     {text}
-                    <input type="checkbox" onChange={deteleIt} />
+                    <button className="eliminar" onClick={deteleIt}>x</button>
                 </div>
             );
         };
+        
 
         const ToDos = () => {
             const [text, setText] = React.useState("");
             const [todos, updateTodos] = React.useState([]);
+            const [fav, updateFav] = React.useState([]);
 
             const updateText = (e) => setText(e.target.value);
 
@@ -91,23 +113,26 @@
 
             return (
                 <main>
+                    <h2 className="saludo">Hola, ¿Qué vamos a hacer hoy?</h2>
                     <form onSubmit={addNewTodo}>
                         <input className="input" value={text} onChange={updateText} />
                         <button className="add" onClick={addNewTodo}>
-                            Add!
+                            Agregar tarea
               </button>
                     </form>
-
+                  
                     <section className="todos">
-                        {todos.map((todo, index) => {
-                            const deleteTodo = (text) => updateTodos((oldTodos) => oldTodos.filter((todo) => todo != text));
-                            return <ToDo key={index} text={todo} deleteTodo={deleteTodo} />;
-                        })}
+                        {
+
+                            todos.map((todo, index) => {
+                                const deleteTodo = (text) => updateTodos((oldTodos) => oldTodos.filter((todo) => todo != text));
+                                return <ToDo key={index} text={todo} deleteTodo={deleteTodo}/>;
+                            })}
                     </section>
+                  
                 </main>
             );
         };
-
         ReactDOM.render(<ToDos />, document.getElementById("root"));
     </script>
 </body>
