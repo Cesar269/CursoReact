@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ToDos</title>
+    <title>To do tareas</title>
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
 
@@ -17,12 +17,15 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
+        body{
+            background-color: #222831;
+        }
         main {
-            background-color: #f1f6f9;
             padding: 2rem;
             border-radius: 0.1rem;
             font-size: 1.4rem;
-            height: 100vh;
+            
+            color: #e8e8e8;
         }
 
         form {
@@ -35,12 +38,26 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #9ba4b4ea;
-            color: #14274e;
+            background-color: #f05454;
+            color: #e8e8e8;
             padding: 0.5em;
             margin: 0.5em 0;
+            border-radius: 0.5em;
+            font-family: sans-serif;
+            transition: 0.3s;
+        }
+        .todo:hover{
+            background-color: #f36b6b;
+            font-size: 20px;
+        }
+        .terminados{
+            background-color:#f054547e;
+            color: #e8e8e8;
+            padding: 0.5em;
+            margin: 0.2em 0;
             border-radius: 0.1em;
             font-family: sans-serif;
+            text-decoration: line-through;
         }
         .eliminar{
             background-color: red;
@@ -48,26 +65,37 @@
             border-radius: 20px;
             border: 0;
             padding: 9px;
+            cursor: pointer;
 
 
         }
 
         .add {
-            background-color: #14274e;
-            color: #f1f6f9;
+            background-color: #30475e;
+            color: #e8e8e8;
             border-radius: 1rem;
             border: 0;
             padding: 0.6rem 4rem;
             font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+        .add:hover{
+            background-color: #4d6781;
         }
 
         .saludo {
             font-family: 'Open Sans', sans-serif;
+
         }
 
         .input {
             font-size: 1.2rem;
-            width: 40vw;
+            width: 61vw;
+            background-color: #d9e5f1;
+            border: 0;
+            border-radius: 15px;
+            padding-left: 10px;
         }
 
         input[type="checkbox"] {
@@ -76,20 +104,27 @@
     </style>
 
     <script type="text/babel">
-        const ToDo = ({ text, deleteTodo}) => {
+        const ToDo = ({ text, deleteTodo, agregarFav}) => {
             const deteleIt = () => {
                 deleteTodo(text);
+               agregarFav(text);
               
             }
-                
             return (
-                <div className="todo" onClick={deteleIt}>
+                <div className="todo" >
                     {text}
-                    <button className="eliminar" onClick={deteleIt}>x</button>
+                    <button className="eliminar" onClick={deteleIt}>X  eliminar</button>
+                </div>
+            ); 
+        };
+        const Favs = ({text}) =>
+        {
+            return(
+                <div className="terminados">
+                    {text}
                 </div>
             );
-        };
-        
+        }
 
         const ToDos = () => {
             const [text, setText] = React.useState("");
@@ -110,6 +145,7 @@
 
                 return false;
             };
+          
 
             return (
                 <main>
@@ -120,14 +156,29 @@
                             Agregar tarea
               </button>
                     </form>
+                    <p className="saludo">Tareas:</p>
                   
                     <section className="todos">
                         {
 
                             todos.map((todo, index) => {
-                                const deleteTodo = (text) => updateTodos((oldTodos) => oldTodos.filter((todo) => todo != text));
-                                return <ToDo key={index} text={todo} deleteTodo={deleteTodo}/>;
+                                const agregarFav = (text) => {
+                                    fav.push(text);
+                                }
+                                const deleteTodo = (text) => updateTodos((oldTodos) => oldTodos.filter((todo) => {return todo != text}));
+                                return <ToDo key={index} text={todo} deleteTodo={deleteTodo} agregarFav={agregarFav}/>;
                             })}
+                    </section>
+                <hr/>
+                    <p className="saludo">Terminados:</p>
+                    <section>
+                        {
+                            fav.map((text, index) =>{
+
+                                return <Favs text={text} key={index}/>;
+                            })
+                        }
+
                     </section>
                   
                 </main>
